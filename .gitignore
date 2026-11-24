@@ -1,0 +1,19 @@
+# Java / Maven
+target/
+*.class
+
+# React
+node_modules/
+dist/
+.env
+
+# Python
+__pycache__/
+*.pyc
+venv/
+
+# IDEs
+.idea/
+.vscode/
+*.iml
+nbproject/

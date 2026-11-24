@@ -1,0 +1,14 @@
+# Levanta MongoDB local para los dos microservicios: docker compose up -d
+# Cada microservicio usa su PROPIA base de datos dentro de este servidor:
+#   - Microservicio A-B (puerto 8081): agentes_inteligentes_db  (colecciones agentes_inteligentes y agentes_navegacion)
+#   - Microservicio C   (puerto 8082): tareas_agentes_db        (coleccion tareas_agentes)
+services:
+  mongodb:
+    image: mongo:7
+    container_name: mongo-agentes
+    ports:
+      - "27017:27017"
+    volumes:
+      - datos-mongo:/data/db
+volumes:
+  datos-mongo:

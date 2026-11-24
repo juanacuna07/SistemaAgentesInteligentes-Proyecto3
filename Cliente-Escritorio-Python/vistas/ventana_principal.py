@@ -16,6 +16,7 @@ from vistas.agente_navegacion.vista_consultar import VistaConsultarAgenteNavegac
 from vistas.agente_navegacion.vista_eliminar import VistaEliminarAgenteNavegacion
 from vistas.agente_navegacion.vista_listar import VistaListarAgenteNavegacion
 from vistas.estilos import aplicar_estilos
+from vistas.ventana_base import centrar_en_pantalla
 from vistas.tarea_agente.vista_actualizar import VistaActualizarTareaAgente
 from vistas.tarea_agente.vista_adicionar import VistaAdicionarTareaAgente
 from vistas.tarea_agente.vista_consultar import VistaConsultarTareaAgente
@@ -28,7 +29,7 @@ class VentanaPrincipal(tk.Tk):
     def __init__(self):
         super().__init__()
         self.title(f"{NOMBRE_APP} · v{VERSION}")
-        self.geometry("760x460")
+        centrar_en_pantalla(self, 760, 460)
         self.minsize(620, 400)
         aplicar_estilos(self)
         self._abiertas = {}
@@ -78,22 +79,22 @@ class VentanaPrincipal(tk.Tk):
     def _crear_portada(self):
         marco = ttk.Frame(self, padding=32)
         marco.pack(fill="both", expand=True)
-        ttk.Label(marco, text=NOMBRE_APP, style="Portada.TLabel").pack(anchor="w")
-        ttk.Label(marco, text=TECNOLOGIA, style="Ayuda.TLabel").pack(anchor="w", pady=(2, 18))
-        ttk.Label(marco, wraplength=640, justify="left", text=(
+        ttk.Label(marco, text=NOMBRE_APP, style="Portada.TLabel").pack()
+        ttk.Label(marco, text=TECNOLOGIA, style="Ayuda.TLabel").pack(pady=(2, 18))
+        ttk.Label(marco, wraplength=640, justify="center", text=(
             "Use el menú superior para gestionar los agentes inteligentes (maestro), sus "
             "agentes de navegación (detalle) y las tareas de cada agente inteligente: adicionar, "
             "consultar, listar, actualizar y eliminar. Cada opción abre una ventana dedicada a un "
             "solo caso de uso. Las tareas se guardan en un microservicio aparte, pero la aplicación "
             "solo se comunica con el servidor GraphQL."
-        )).pack(anchor="w")
+        )).pack()
 
         estado = ttk.LabelFrame(marco, text="Servidor GraphQL", padding=12)
-        estado.pack(fill="x", pady=(24, 0))
+        estado.pack(pady=(24, 0))
         ttk.Label(estado, text=URL_GRAPHQL).pack(side="left")
         self.indicador = ttk.Label(estado, text="Sin verificar", style="Ayuda.TLabel")
         self.indicador.pack(side="left", padx=12)
-        ttk.Button(estado, text="Probar conexión", command=self.probar_conexion).pack(side="right")
+        ttk.Button(estado, text="Probar conexión", command=self.probar_conexion).pack(side="left")
 
     def probar_conexion(self):
         try:

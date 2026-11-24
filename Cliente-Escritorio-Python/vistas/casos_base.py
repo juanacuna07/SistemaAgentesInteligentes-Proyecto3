@@ -64,13 +64,13 @@ class VentanaAdicionar(_ConEntidad, VentanaBase):
                              "Complete los datos y guarde el nuevo registro.", 820, 500)
         self._crear_servicio()
         self.formulario = Formulario(self.cuerpo, self.campos, self.proveedor_referencias())
-        self.formulario.pack(fill="x")
+        self.formulario.pack()
         _observar_referencias(self, self.formulario)
 
         botones = ttk.Frame(self.cuerpo)
-        botones.pack(fill="x", pady=(18, 0))
-        ttk.Button(botones, text="Guardar", style="Primario.TButton", command=self.guardar).pack(side="right")
-        ttk.Button(botones, text="Limpiar", command=self.formulario.limpiar).pack(side="right", padx=8)
+        botones.pack(pady=(18, 0))
+        ttk.Button(botones, text="Limpiar", command=self.formulario.limpiar).pack(side="left", padx=8)
+        ttk.Button(botones, text="Guardar", style="Primario.TButton", command=self.guardar).pack(side="left")
 
     def guardar(self):
         def accion():
@@ -90,7 +90,7 @@ class VentanaConsultar(_ConEntidad, VentanaBase):
         VentanaBase.__init__(self, master, f"Consultar {self.nombre_entidad}",
                              "Consulte UN registro escribiendo su ID o su nombre.", 640, 520)
         self._crear_servicio()
-        Buscador(self.cuerpo, self._buscar).pack(fill="x")
+        Buscador(self.cuerpo, self._buscar).pack()
         self.ficha = Ficha(self.cuerpo, self.campos, f"Datos del {self.nombre_entidad}")
         self.ficha.pack(fill="both", expand=True, pady=(14, 0))
 
@@ -112,15 +112,15 @@ class VentanaEliminar(_ConEntidad, VentanaBase):
                              "Primero busque el registro y revise toda su información.", 640, 560)
         self._crear_servicio()
         self._actual = None
-        Buscador(self.cuerpo, self._buscar).pack(fill="x")
+        Buscador(self.cuerpo, self._buscar).pack()
         self.ficha = Ficha(self.cuerpo, self.campos, "Registro a eliminar")
         self.ficha.pack(fill="both", expand=True, pady=(14, 0))
 
         botones = ttk.Frame(self.cuerpo)
-        botones.pack(fill="x", pady=(14, 0))
+        botones.pack(pady=(14, 0))
         self.boton = ttk.Button(botones, text="Eliminar", style="Peligro.TButton",
                                 command=self._eliminar, state="disabled")
-        self.boton.pack(side="right")
+        self.boton.pack()
 
     def _reiniciar(self):
         self._actual = None
@@ -161,7 +161,7 @@ class VentanaActualizar(_ConEntidad, VentanaBase):
                              1060, 600)
         self._crear_servicio()
         self._actual = None
-        Buscador(self.cuerpo, self._buscar).pack(fill="x")
+        Buscador(self.cuerpo, self._buscar).pack()
 
         contenido = ttk.Frame(self.cuerpo)
         contenido.pack(fill="both", expand=True, pady=(14, 0))
@@ -171,16 +171,16 @@ class VentanaActualizar(_ConEntidad, VentanaBase):
         marco = ttk.LabelFrame(contenido, text="Nuevos datos", padding=12)
         marco.pack(side="left", fill="both", expand=True, padx=(14, 0))
         self.formulario = Formulario(marco, self.campos, self.proveedor_referencias(), mostrar_ayuda=False)
-        self.formulario.pack(fill="x")
+        self.formulario.pack()
         llave = next(c.clave for c in self.campos if c.es_llave)
         self.formulario.bloquear(llave)  # la llave primaria no se modifica
         _observar_referencias(self, self.formulario)
 
         botones = ttk.Frame(self.cuerpo)
-        botones.pack(fill="x", pady=(14, 0))
+        botones.pack(pady=(14, 0))
         self.boton = ttk.Button(botones, text="Guardar cambios", style="Primario.TButton",
                                 command=self._guardar, state="disabled")
-        self.boton.pack(side="right")
+        self.boton.pack()
 
     def _buscar(self, criterio, valor):
         self._actual = None
@@ -236,7 +236,7 @@ class VentanaListar(_ConEntidad, VentanaBase):
         self._consulta = (self.filtros[0], None)   # filtro y valor de la ultima consulta aplicada
 
         barra = ttk.LabelFrame(self.cuerpo, text="Filtro", padding=10)
-        barra.pack(fill="x")
+        barra.pack()
         ttk.Label(barra, text="Filtrar por").pack(side="left")
         self.combo_filtro = ttk.Combobox(barra, state="readonly", width=20,
                                          values=[f["etiqueta"] for f in self.filtros])
@@ -263,21 +263,21 @@ class VentanaListar(_ConEntidad, VentanaBase):
         self.tabla.pack(fill="both", expand=True, pady=(12, 0))
 
         # ---- barra de paginacion
+        self.estado = ttk.Label(self.cuerpo, text="", style="Ayuda.TLabel")
+        self.estado.pack(pady=(8, 0))
         paginacion = ttk.Frame(self.cuerpo)
-        paginacion.pack(fill="x", pady=(8, 0))
-        self.estado = ttk.Label(paginacion, text="", style="Ayuda.TLabel")
-        self.estado.pack(side="left")
-        self.boton_siguiente = ttk.Button(paginacion, text="Siguiente ▶", command=lambda: self._ir_a(self._pagina + 1))
-        self.boton_siguiente.pack(side="right")
-        self.etiqueta_pagina = ttk.Label(paginacion, text="Página 1 de 1")
-        self.etiqueta_pagina.pack(side="right", padx=10)
-        self.boton_anterior = ttk.Button(paginacion, text="◀ Anterior", command=lambda: self._ir_a(self._pagina - 1))
-        self.boton_anterior.pack(side="right")
+        paginacion.pack(pady=(4, 0))
+        ttk.Label(paginacion, text="Filas por página").pack(side="left", padx=(0, 6))
         self.combo_tamano = ttk.Combobox(paginacion, state="readonly", width=5, values=TAMANOS_PAGINA)
         self.combo_tamano.set(25)
-        self.combo_tamano.pack(side="right", padx=(0, 16))
+        self.combo_tamano.pack(side="left", padx=(0, 16))
         self.combo_tamano.bind("<<ComboboxSelected>>", lambda _e: self._ir_a(0))
-        ttk.Label(paginacion, text="Filas por página").pack(side="right", padx=(0, 6))
+        self.boton_anterior = ttk.Button(paginacion, text="◀ Anterior", command=lambda: self._ir_a(self._pagina - 1))
+        self.boton_anterior.pack(side="left")
+        self.etiqueta_pagina = ttk.Label(paginacion, text="Página 1 de 1")
+        self.etiqueta_pagina.pack(side="left", padx=10)
+        self.boton_siguiente = ttk.Button(paginacion, text="Siguiente ▶", command=lambda: self._ir_a(self._pagina + 1))
+        self.boton_siguiente.pack(side="left")
 
         self._cambio_filtro()
         self.after(150, self.listar_todos)

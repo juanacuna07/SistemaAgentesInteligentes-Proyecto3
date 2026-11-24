@@ -173,11 +173,12 @@ class Ficha(ttk.LabelFrame):
     def __init__(self, master, campos, titulo="Información del registro"):
         super().__init__(master, text=titulo, padding=12)
         self._filas = {}
-        self.columnconfigure(1, weight=1)
+        contenido = ttk.Frame(self)   # bloque centrado dentro del recuadro
+        contenido.pack()
         for i, campo in enumerate(campos):
-            ttk.Label(self, text=campo.etiqueta + ":", style="Etiqueta.TLabel").grid(
-                row=i, column=0, sticky="nw", padx=(0, 12), pady=2)
-            valor = ttk.Label(self, text="—", wraplength=340, justify="left")
+            ttk.Label(contenido, text=campo.etiqueta + ":", style="Etiqueta.TLabel").grid(
+                row=i, column=0, sticky="ne", padx=(0, 12), pady=2)
+            valor = ttk.Label(contenido, text="—", wraplength=340, justify="left")
             valor.grid(row=i, column=1, sticky="w", pady=2)
             self._filas[campo.clave] = (campo, valor)
 
@@ -198,9 +199,8 @@ class Tabla(ttk.Frame):
         self._columnas = columnas
         self.arbol = ttk.Treeview(self, columns=[c[0] for c in columnas], show="headings", height=14)
         for clave, titulo, ancho, tipo in columnas:
-            self.arbol.heading(clave, text=titulo, anchor="w")
-            alineacion = "e" if tipo in ("entero", "decimal") else "w"
-            self.arbol.column(clave, width=ancho, minwidth=60, anchor=alineacion, stretch=True)
+            self.arbol.heading(clave, text=titulo, anchor="center")
+            self.arbol.column(clave, width=ancho, minwidth=60, anchor="center", stretch=True)
         barra_y = ttk.Scrollbar(self, orient="vertical", command=self.arbol.yview)
         barra_x = ttk.Scrollbar(self, orient="horizontal", command=self.arbol.xview)
         self.arbol.configure(yscrollcommand=barra_y.set, xscrollcommand=barra_x.set)
